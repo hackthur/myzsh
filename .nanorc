@@ -1,0 +1,34 @@
+# Include Python syntax highlighting
+include /usr/share/nano/python.nanorc
+
+# Include Bash syntax highlighting
+include /usr/share/nano/sh.nanorc
+
+
+# Enable auto-indentation
+set autoindent
+
+# Set tab size to 4 spaces
+set tabsize 4
+
+
+
+## Enable line numbers
+set linenumbers
+
+## Show the cursor position
+set constantshow
+
+
+## Enable mouse support
+set mouse
+
+## Display matching parentheses
+set matchbrackets "(<[{"
+
+
+## Display line and column numbers in status bar
+set positionlog
+
+## Use soft wrapping for long lines
+set softwrap
