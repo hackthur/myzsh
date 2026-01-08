@@ -1,0 +1,44 @@
+{
+    "workbench.iconTheme": "material-icon-theme",
+    "terminal.integrated.defaultProfile.linux": "bash", 
+    "editor.fontFamily": "'agave NF'",
+    "editor.fontSize": 16,
+    "editor.lineHeight":18,
+    "workbench.colorTheme": "Material Theme Ocean",
+    "terminal.integrated.fontSize": 14,
+    "python.formatting.provider": "autopep8",
+    "files.insertFinalNewline": true,
+    "editor.bracketPairColorization.enabled": false,
+    "editor.rulers": [
+        80
+    ],
+    "editor.tokenColorCustomizations": {
+        "[Material Theme Ocean]":{
+            "variables": "#ABB2BF",
+            "textMateRules": [{
+                "scope":[
+                    "keyword.operator",
+                    "keyword.operator.arithmetic",
+                    "keyword.operator.assignment",
+                    "keyword.operator.logical",
+                    "keyword.operator.new",
+                    "keyword.operator.comparison"
+                ],
+                "settings": {
+                    "foreground": "#56B6C2",
+                },
+            },{
+                "scope":[
+                    "comment",
+                    "keyword.control",
+                    "keyword.other",
+                    "storage.type.fucntion.js",
+                    "storage.modifier.async.js",
+                    "storage.type.js"
+                ],"settings": {
+                    "fontStyle": "italic",
+                }
+            }]
+        }
+    }
+}
