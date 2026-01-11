@@ -54,7 +54,7 @@ keys = [
     Key([mod], "n", lazy.spawn("kitty")),
     Key([mod], "y", lazy.spawn("mate-terminal")),
     Key([mod], "l", lazy.spawn("/opt/idea-IU-231.9011.34/bin/idea.sh")),
-    Key([mod], "b", lazy.spawn("/opt/pycharm-2023.1.2/bin/pycharm.sh")),
+    Key([mod], "b", lazy.spawn("/home/arthur/BurpSuiteCommunity/BurpSuiteCommunity")),
     Key([mod], "s", lazy.spawn("flameshot gui")),
     Key([mod, 'shift'], 's', lazy.spawn("scrot")),
     Key([mod, 'shift'], "m", lazy.spawn("rofi -show run")),
