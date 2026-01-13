@@ -62,6 +62,7 @@ gitcopy(){
 
 mkt(){
   mkdir {nmap,content,exploit}
+  touch README.md
 }
 
 gitComment(){
@@ -77,11 +78,11 @@ parrot(){
 }
 
 
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOBIN:$GOROOT/bin
-export GO111MODULE=auto
+# export GOPATH=$HOME/go
+# export GOBIN=$GOPATH/bin
+# export GOROOT=/usr/local/go
+# export PATH=$PATH:$GOBIN:$GOROOT/bin
+# export GO111MODULE=auto
 
 export TERM=xterm-256color
 
