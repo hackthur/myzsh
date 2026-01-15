@@ -27,7 +27,7 @@ sudo systemctl enable mariadb
 
 sudo mysql_secure_installation
 
-mysql -u root -p 
+sudo mysql -u root -p 
 ```
 
 ## Create a Mysql user with grant privileges
