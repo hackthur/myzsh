@@ -1,10 +1,49 @@
 # myzsh
 
 
+
+## Arch Linux Installation Steps:
+
+```bash
+cfdisk /dev/sd<partition or disk to choose>
+mkfs.ext4 /dev/sd<partition or disk to choose>1
+
+mount /dev/sd<partition or disk to choose>1 /mnt/
+
+pacstrap /mnt linux linux-firmware grub networkmanager base base-devel vim nano
+
+genfstab -U /mnt >> /mnt/etc/fstab
+
+arch-chroot /mnt/
+
+passwd 
+
+useradd -m <new user>
+passwd <new user>
+
+usermod -aG wheel,video,audio,storage <new user>
+
+nano /etc/sudoers
+
+echo "hackthur" > /etc/hostname
+echo "KEYMAP=es" > /etc/vconsole.conf
+nano /etc/hosts
+nano /etc/locale.gen
+locale-gen
+
+grub-install /dev/sd<partition or disk choosed>
+grub-mkconfig -o /boot/grub/grub.cfg
+
+exit
+
+reboot now
+```
+
+
 ## YAY (AUR) ArchLinux package manager
 
 ```bash
-sudo pacman -S base-devel git
+sudo pacman -S git
 cd /opt/
 sudo git clone https://aur.archlinux.org/yay-git.git
 sudo chown -R username:username yay-git/
