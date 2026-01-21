@@ -1,42 +1,59 @@
-# myzsh
+# Arch linux
 
+## Installation 
 
+For the installation I choose the username **hackthur** but you can choose the user you want 
+and that is for the partition
 
-## Arch Linux Installation Steps:
+- username: **hackthur**
+- parition: **/dev/sda**
+
 
 ```bash
-cfdisk /dev/sd<partition or disk to choose>
-mkfs.ext4 /dev/sd<partition or disk to choose>1
 
-mount /dev/sd<partition or disk to choose>1 /mnt/
+[arthur@hackthur ~]$ cfdisk /dev/sda
+[arthur@hackthur ~]$ mkfs.ext4 /dev/sda1
 
-pacstrap /mnt linux linux-firmware grub networkmanager base base-devel vim nano
+[arthur@hackthur ~]$ mount /dev/sda1 /mnt/
 
-genfstab -U /mnt >> /mnt/etc/fstab
+[arthur@hackthur ~]$ pacstrap /mnt linux linux-firmware grub networkmanager base base-devel vim nano
 
-arch-chroot /mnt/
+[arthur@hackthur ~]$ genfstab -U /mnt >> /mnt/etc/fstab
 
-passwd 
+[arthur@hackthur ~]$ arch-chroot /mnt/
 
-useradd -m <new user>
-passwd <new user>
 
-usermod -aG wheel,video,audio,storage <new user>
+# the `passwd` first suppose to choose the new password for root
 
-nano /etc/sudoers
+[arthur@hackthur ~]$ passwd 
 
-echo "hackthur" > /etc/hostname
-echo "KEYMAP=es" > /etc/vconsole.conf
-nano /etc/hosts
-nano /etc/locale.gen
-locale-gen
+[arthur@hackthur ~]$ useradd -m hackthur
+[arthur@hackthur ~]$ passwd hackthur
 
-grub-install /dev/sd<partition or disk choosed>
-grub-mkconfig -o /boot/grub/grub.cfg
+[arthur@hackthur ~]$ usermod -aG wheel,video,audio,storage hackthur
 
-exit
+[arthur@hackthur ~]$ nano /etc/sudoers
 
-reboot now
+[arthur@hackthur ~]$ echo "hackthur" > /etc/hostname
+[arthur@hackthur ~]$ echo "KEYMAP=es" > /etc/vconsole.conf
+[arthur@hackthur ~]$ nano /etc/hosts
+
+[arthur@hackthur ~]$ /bin/cat /etc/hosts
+# Static table lookup for hostnames.
+# See hosts(5) for details.
+127.0.0.1        localhost
+::1              localhost
+127.0.0.1	 hackthur.localhost hackthur
+
+[arthur@hackthur ~]$ nano /etc/locale.gen
+[arthur@hackthur ~]$ locale-gen
+
+[arthur@hackthur ~]$ grub-install /dev/sd<partition or disk choosed>
+[arthur@hackthur ~]$ grub-mkconfig -o /boot/grub/grub.cfg
+
+[arthur@hackthur ~]$ exit
+
+[arthur@hackthur ~]$ reboot now
 ```
 
 
