@@ -1,0 +1,45 @@
+@theme "/usr/share/rofi/themes/arthur.rasi"
+
+configuration {
+  show-icons: true;
+}
+
+element {
+  children: [element-icon, element-text];
+}
+
+element-icon {
+  padding: 0 10px 0 0;
+} 
+
+configuration {
+  font: env(ROFI_FONT, "JetBrainsMono Nerd Font Medium 12");
+
+  drun {
+    display-name: "";
+  }
+
+  run {
+    display-name: "";
+  }
+
+  window {
+    display-name: "";
+  }
+}
+
+inputbar {
+  children: [prompt, entry];
+}
+
+
+@import "font"
+
+* {
+  background-color: transparent;
+
+  border: 0;
+  margin: 0;
+  padding: 0;
+  spacing: 0;
+}
