@@ -50,7 +50,7 @@ wmname = "LG3D"
 
 cmd = [
     "setxkbmap latam",
-    "feh --bg-fill ~/.config/qtile/images/rick.jpg",
+    "feh --bg-fill ~/.config/qtile/images/hackthur2.png",
     "picom &"
 ]
 
