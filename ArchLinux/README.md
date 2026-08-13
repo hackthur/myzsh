@@ -54,7 +54,9 @@ and that is for the partition
 [arthur@hackthur ~]$ exit
 
 [arthur@hackthur ~]$ reboot now
-
+[arthur@hackthur ~]$ echo "old command installation"
+[arthur@hackthur ~]$ sudo pacman -S gnome firefox alacritty kitty qtile python python-pip xorg xorg-server git
+[arthur@hackthur ~]$ echo "new command installation"
 [arthur@hackthur ~]$ sudo pacman -S gdm firefox alacritty python python-pip gnome qtile git python-pywlroots xorg-xwayland python-pyxdg ttf-dejavu ttf-nerd-fonts-symbols-common
 
 ```
