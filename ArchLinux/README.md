@@ -155,7 +155,14 @@ GDM runs on Wayland by default, which can cause session handoff failures if you 
   ```bash
   journalctl --user -b 0 -e
   ```
-Look for lines containing qtile or Xorg to pinpoint if a syntax error in your personal ~/.config/qtile/config.py file is causing the crash.If you are a
+Look for lines containing qtile or Xorg to pinpoint if a syntax error in your personal ~/.config/qtile/config.py file is causing the crash.
+
+```bash
+sudo pacman -S python-pywlroots xorg-xwayland python-pyxdg
+```
+
+url:
+https://www.google.com/search?q=how+can+i+do+to+know+which+backend+is+on+my+machine+or+from+which+depends+the+kind+of+backend+installed+in+my+computer+for+the+windows+manager%3F&rlz=1C1VDKB_esEC1200EC1200&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTM0MTQxajBqN6gCALACAA&sourceid=chrome&ie=UTF-8&udm=50&fbs=ABfTbFUDadgeu2mn4mYJ8iEZ1GUDXtepUMVJXDMtqDc3xxrzVWEVPmVGZcFkg8o3Cglbi-juw-nlGyaUsScK1Rhja0SSIQBamZ_ZBsObNYS6_jkz2k2NkYjcvUp35NKarnPcD0VAOBucWJOTzQUKY0XLlP4VZD-fTo1YnrDhRV8LP-5l-ymFUZcMv9Ph_p6Y_77UIz4UjmsNjCcB8K6IQ8GGNss09_adFQ&aep=10&ntc=1&sxsrf=APpeQnvUCztcchxohCv65KDGYXronc0yaw%3A1786639101760&mstk=AUtExfA5ZurD4M-CAGAgasFcrc7_zZ-Ccr4AgW1zbphbJcSLBH7hDgvOUvYjAXt69twmGonkQC1p2VhrFvwCjHsX5uwGbPeV1s4OgeSreKC_F2H1bO9Vhgxwp_g-i-pg1-8-JfaC1jrAEnO53jfutmeTm5aPoegCeJpiteR9evEk1Sq-ADCJsh91a4PWQ4BaYWX2BHOSeDNcQ6mAzqZfKhZSA1276tp0wQWrpkAkPggTGpVPzMacbb2IEPEOAHsFPkhWXE__dCLr4TccuUM23DssHadWjWVKWNZZmZvVyXx6NVuHcqT8PDMpvw8UhCgw2Lt0ib9TxYLih40w5Q&aioh=3&csuir=1&cs=1&atvm=2&mtid=R_R9aqikHKSGwbkP8KuU6Q0
 
 
 
