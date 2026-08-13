@@ -94,3 +94,69 @@ CREATE USER 'sammy'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON *.* TO 'sammy'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 ```
+
+
+## Configuration for the Wayland service
+### Check for Broken Python DependenciesQtile is written in Python, and updates to core libraries like cairocffi or xcffib can frequently break the launch sequence.Switch to a virtual terminal by pressing Ctrl + Alt + F3.
+  
+  1. Switch to a virtual terminal by pressing Ctrl + Alt + F3
+  2. Log in with your username and password.
+  3. Run the following command to check if Qtile can start at all
+
+```bash
+qtile start
+```
+  4. If it returns an initialization error regarding a specific Python module (e.g., xcffib), you need to reinstall or fix the package. Run:
+```bash
+sudo pacman -Syu python-cairocffi python-xcffib qtile
+```
+
+### Verify the Desktop Entry File
+
+GDM needs a .desktop file to recognize Qtile as an available session. If you are missing this file, GDM will not be able to hand off the session properly.
+  
+  1. Check if the file exists by running
+   ```bash
+    ls /usr/share/xsessions/qtile.desktop
+  ```
+  2. If it is missing, create it manually
+  ```bash
+  sudo nano /usr/share/xsessions/qtile.desktop
+  ```
+  3. Paste the following configuration into the file:
+  ```bash
+  [Desktop Entry]
+  Name=Qtile
+  Comment=Qtile Tiling Window Manager
+  Exec=qtile start
+  Type=Application
+  Keywords=wm;tiling;
+  ```
+  4. Save and exit (Ctrl + O, then Ctrl + X)
+ 
+
+### Force GDM to Use Xorg (Disable Wayland)
+
+GDM runs on Wayland by default, which can cause session handoff failures if you are launching an X11-based window manager like the default Qtile.
+
+  1. Open the GDM custom configuration file:bash
+  ```bash
+    sudo nano /etc/gdm/custom.conf
+  ```
+  2. Locate the line #WaylandEnable=false and uncomment it by removing the #
+  ```ini
+  WaylandEnable=false
+  ```
+  3. Save the file and restart your GDM service
+  ```bash
+  sudo systemctl restart gdm.service
+  ```
+  4. Check the Error LogsIf it still crashes back to the GDM login screen, look at your user system logs immediately after a failed login attempt
+  ```bash
+  journalctl --user -b 0 -e
+  ```
+Look for lines containing qtile or Xorg to pinpoint if a syntax error in your personal ~/.config/qtile/config.py file is causing the crash.If you are a
+
+
+
+
