@@ -166,6 +166,39 @@ Look for lines containing qtile or Xorg to pinpoint if a syntax error in your pe
 sudo pacman -S python-pywlroots xorg-xwayland python-pyxdg
 ```
 
+```bash
+[hackthur@hackarthur ~]$ cat /usr/share/wayland-sessions/qtile.desktop 
+─────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+     │ File: /usr/share/wayland-sessions/qtile.desktop 
+─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+1    │ [Desktop Entry] 
+2    │ Name=Qtile 
+3    │ Comment=Qtile Session 
+4    │ DesktopNames=qtile 
+5    │ # Start qtile as a systemd user service so graphical-session.target is 
+6    │ # activated and xdg-desktop-portal (screen sharing, file pickers, ...) works. 
+7    │ # Needs qtile.service and qtile-session.target (from the qtile source tree, 
+8    │ # resources/) installed to ~/.config/systemd/user/; see resources/README. 
+9    │ # The Exec hands the variables the display manager set for the session to the 
+10   │ # user manager (bare "import-environment" is deprecated, so they are listed 
+11   │ # explicitly), then starts qtile.service. The list includes XDG_CURRENT_DESKTOP
+12   │ # (set above via DesktopNames) and XDG_SESSION_TYPE, which qtile uses to pick 
+13   │ # its backend; unset variables are skipped. Static vars (locale, toolkit 
+14   │ # settings, ...) are better placed in ~/.config/environment.d/. 
+15   │ # To start qtile directly instead, use: Exec=qtile start 
+16   │ Exec=/bin/sh -c "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XAUTHORITY XDG_SEAT XDG_VTNR XDG_SESSION_ID XDG_SESSION_TYPE XDG_SESSION_ │ CLASS XDG_SESSION_DESKTOP XDG_CURRENT_DESKTOP            DESKTOP_SESSION; exec systemctl --user start --wait qtile.service" 
+17   │ Type=Application 
+18   │ Keywords=wm;tiling
+```
+
+replace in line 16 for
+
+`Exec=qtile start`
+
+
+
+
+
 url:
 https://www.google.com/search?q=how+can+i+do+to+know+which+backend+is+on+my+machine+or+from+which+depends+the+kind+of+backend+installed+in+my+computer+for+the+windows+manager%3F&rlz=1C1VDKB_esEC1200EC1200&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCTM0MTQxajBqN6gCALACAA&sourceid=chrome&ie=UTF-8&udm=50&fbs=ABfTbFUDadgeu2mn4mYJ8iEZ1GUDXtepUMVJXDMtqDc3xxrzVWEVPmVGZcFkg8o3Cglbi-juw-nlGyaUsScK1Rhja0SSIQBamZ_ZBsObNYS6_jkz2k2NkYjcvUp35NKarnPcD0VAOBucWJOTzQUKY0XLlP4VZD-fTo1YnrDhRV8LP-5l-ymFUZcMv9Ph_p6Y_77UIz4UjmsNjCcB8K6IQ8GGNss09_adFQ&aep=10&ntc=1&sxsrf=APpeQnvUCztcchxohCv65KDGYXronc0yaw%3A1786639101760&mstk=AUtExfA5ZurD4M-CAGAgasFcrc7_zZ-Ccr4AgW1zbphbJcSLBH7hDgvOUvYjAXt69twmGonkQC1p2VhrFvwCjHsX5uwGbPeV1s4OgeSreKC_F2H1bO9Vhgxwp_g-i-pg1-8-JfaC1jrAEnO53jfutmeTm5aPoegCeJpiteR9evEk1Sq-ADCJsh91a4PWQ4BaYWX2BHOSeDNcQ6mAzqZfKhZSA1276tp0wQWrpkAkPggTGpVPzMacbb2IEPEOAHsFPkhWXE__dCLr4TccuUM23DssHadWjWVKWNZZmZvVyXx6NVuHcqT8PDMpvw8UhCgw2Lt0ib9TxYLih40w5Q&aioh=3&csuir=1&cs=1&atvm=2&mtid=R_R9aqikHKSGwbkP8KuU6Q0
 
