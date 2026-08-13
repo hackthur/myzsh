@@ -171,4 +171,315 @@ https://www.google.com/search?q=how+can+i+do+to+know+which+backend+is+on+my+mach
 
 
 
+## QTile configuration
+
+`$HOME/.config/qtile/config.py`
+
+```python
+from typing import List  # noqa: F401
+
+from libqtile import bar, layout, widget
+from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.lazy import lazy
+from libqtile.utils import guess_terminal
+import os
+import psutil  # installed by pip the psutil dependency
+import json
+
+# --- ESTO ACTIVA TU TECLADO EN ESPAÑOL LATINOAMERICANO EN WAYLAND ---
+from libqtile.backend.wayland import InputConfig
+wl_input_rules = {
+    "type:keyboard": InputConfig(kb_layout="latam"),
+}
+# --------------------------------------------------------------------
+
+from settings.keys import keys
+from settings.groups import groups
+from settings.layouts import layouts, floating_layout
+from settings.screens import screens
+from settings.path import qtile_path
+from settings.mouse import mouse
+from settings.widgets import widget_defaults, extension_defaults
+
+mod = "mod4"
+
+main = None
+dgroups_key_binder = None
+dgroups_app_rules = []  # type: List
+follow_mouse_focus = True
+bring_front_click = False
+cursor_warp = False
+
+auto_fullscreen = True
+focus_on_window_activation = "smart"
+reconfigure_screens = True
+
+# Cambiamos "LG3D" por "qtile" ya que Wayland no necesita simular ser Java
+wmname = "qtile" 
+
+# --- ELIMINAMOS PICOM, SETXKBMAP Y FEH DE AQUÍ ---
+# El fondo de pantalla ahora lo maneja Qtile de forma nativa en tu archivo de pantallas.
+```
+
+
+`$HOME/.config/qtile/screens.py`
+
+```python
+from libqtile.config import Screen
+from libqtile import bar
+from qtile import qtile  # Importamos el objeto principal de qtile
+from .widgets import primary_widgets, secondary_widgets
+
+def status_bar(widgets):
+    return bar.Bar(widgets, 16, opacity=0.60)
+
+# Ruta de tu fondo de pantalla clásico
+mi_fondo = "~/.config/qtile/images/hackthur2.png"
+
+# Creamos la lista de pantallas vacía
+screens = []
+
+# Le preguntamos a Qtile cuántas pantallas físicas detecta Wayland en tu máquina
+# Si por alguna razón no detecta ninguna en el arranque, ponemos 1 por defecto
+try:
+    num_monitores = len(qtile.core.outputs) if qtile and qtile.core else 1
+except AttributeError:
+    num_monitores = 1
+
+# Configuramos la pantalla principal (Monitor 1)
+screens.append(
+    Screen(
+        top=status_bar(primary_widgets),
+        wallpaper=mi_fondo,
+        wallpaper_mode="fill"
+    )
+)
+
+# Si tienes más monitores conectados (Monitor 2, 3, etc.), les añade su barra secundaria y su fondo
+if num_monitores > 1:
+    for _ in range(1, num_monitores):
+        screens.append(
+            Screen(
+                top=status_bar(secondary_widgets),
+                wallpaper=mi_fondo,
+                wallpaper_mode="fill"
+            )
+        )
+
+```
+
+
+`$HOME/.config/qtile/settings/widgets.py`
+
+````python
+from libqtile import widget
+from .theme import colors
+
+# Get the icons at https://www.nerdfonts.com/cheat-sheet (you need a Nerd Font)
+
+
+dickers = [["#282c34", "#282c34"],
+           ["#1c1f24", "#1c1f24"],
+           ["#dfdfdf", "#dfdfdf"],
+           ["#ff6c6b", "#ff6c6b"],
+           ["#98be65", "#98be65"],
+           ["#da8548", "#da8548"],
+           ["#51afef", "#51afef"],
+           ["#c678dd", "#c678dd"],
+           ["#46d9ff", "#46d9ff"],
+           ["#a9a1e1", "#a9a1e1"]]
+
+
+def base(fg='text', bg='dark'):
+    return {
+        'foreground': colors[fg],
+        'background': colors[bg]
+    }
+    
+    
+def custom_base(fg='text', bg='dark'):
+    return {
+        'foreground': colors[fg],
+        # 'background': colors[bg]
+    }
+
+def separator():
+    return widget.Sep(**base(), linewidth=0, padding=1)
+
+
+def icon(fg='text', bg='dark', fontsize=16, text="?"):
+    return widget.TextBox(
+        **base(fg, bg),
+        fontsize=fontsize,
+        text=text,
+        padding=2
+    )
+
+
+def powerline(fg="light", bg="dark"):
+    return widget.TextBox(
+        **base(fg, bg),
+        text="",  # Icon: nf-oct-triangle_left
+        fontsize=50,
+        padding=3
+    )
+    
+    
+def custom_powerline(fg="light", bg="dark"):
+    return widget.TextBox(
+        **custom_base(fg, bg),
+        text="",  # Icon: nf-oct-triangle_left
+        fontsize=50,
+        padding=3
+    )    
+    
+
+
+def workspaces():
+    return [
+        # separator(),
+        widget.GroupBox(
+            **custom_base(fg='light'),
+            font='UbuntuMono Nerd Font',
+            fontsize=12,
+            margin_y=2,
+            margin_x=0,
+            padding_y=2,
+            padding_x=3,
+            borderwidth=3,
+            active=dickers[2],
+            inactive=dickers[4],
+            rounded=True,
+            highlight_color=dickers[1],
+            highlight_method='line',
+            # urgent_alert_method='block',
+            # urgent_border=colors['urgent'],
+            this_current_screen_border=dickers[6],
+            this_screen_border=dickers[4],
+            other_current_screen_border=dickers[6],
+            other_screen_border=dickers[4],
+            # disable_drag=True
+        ),
+        widget.TextBox(
+            text='   ',
+            font="Hack Nerd Font",
+            # background=dickers[0],
+            #foreground='#4c566a',
+            padding=2,
+            fontsize=14
+        ),
+        separator(),
+        widget.WindowName(font="Hack Nerd Font",
+                          foreground="#4c566a", fontsize=10),
+        # separator(),
+    ]
+
+
+primary_widgets = [
+    *workspaces(),
+
+    # separator(),
+
+    custom_powerline('color4', 'dark'),
+
+    icon(bg="color4", text=' '),  # Icon: nf-fa-download
+
+    widget.CheckUpdates(
+        background=colors['color4'],
+        colour_have_updates=colors['text'],
+        colour_no_updates=colors['text'],
+        no_update_string='0',
+        display_format='{updates}',
+        update_interval=1800,
+        custom_command='checkupdates',
+    ),
+
+    powerline('color3', 'color4'),
+
+    icon(bg="color3", text=' '),  # Icon: nf-fa-feed
+
+    widget.Net(**base(bg='color3'), interface='enp0s25'),
+
+    #powerline('color2', 'color3'),
+
+    #widget.CurrentLayoutIcon(**base(bg='color2'), scale=0.65),
+
+    # widget.CurrentLayout(**base(bg='color2'), padding=5),
+
+    powerline('color1', 'color3'),
+
+    # icon(bg="color1", fontsize=17),  # Icon: nf-mdi-calendar_clock
+
+    widget.Clock(**base(bg='color1'), format='%d/%m/%Y - %H:%M '),
+
+    powerline('dark', 'color1'),
+
+    widget.StatusNotifier(background=colors['dark'], padding=5),
+]
+
+"""
+primary_widgets = [
+    *workspaces(),
+
+    # separator(),
+
+    custom_powerline('color4', 'dark'),
+
+    icon(bg="color4", text=' '),  # Icon: nf-fa-download
+
+    widget.CheckUpdates(
+        background=colors['color4'],
+        colour_have_updates=colors['text'],
+        colour_no_updates=colors['text'],
+        no_update_string='0',
+        display_format='{updates}',
+        update_interval=1800,
+        custom_command='checkupdates',
+    ),
+
+    powerline('color3', 'color4'),
+
+    icon(bg="color3", text=' '),  # Icon: nf-fa-feed
+
+    # Dejamos Net listo. Si no marca red, recuerda quitarle el parámetro interface
+    widget.Net(**base(bg='color3'), interface='enp0s25'), 
+
+    powerline('color1', 'color3'),
+
+    widget.Clock(**base(bg='color1'), format='%d/%m/%Y - %H:%M '),
+
+    powerline('dark', 'color1'),
+
+    # === CAMBIO CRÍTICO PARA WAYLAND AQUÍ ===
+    widget.StatusNotifier(background=colors['dark'], padding=5),
+]
+"""
+
+secondary_widgets = [
+    *workspaces(),
+
+    separator(),
+
+    powerline('color1', 'dark'),
+
+    widget.CurrentLayout(**base(bg='color1'), scale=0.65),
+
+    widget.CurrentLayout(**base(bg='color1'), padding=5),
+
+    powerline('color2', 'color1'),
+
+    widget.Clock(**base(bg='color2'), format='%d/%m/%Y - %H:%M '),
+
+    powerline('dark', 'color2'),
+]
+
+widget_defaults = {
+    'font': 'UbuntuMono Nerd Font Bold',
+    'fontsize': 14,
+    'padding': 1,
+}
+extension_defaults = widget_defaults.copy()
+```
+
+
 
