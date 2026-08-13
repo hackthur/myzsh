@@ -54,6 +54,9 @@ and that is for the partition
 [arthur@hackthur ~]$ exit
 
 [arthur@hackthur ~]$ reboot now
+
+[arthur@hackthur ~]$ sudo pacman -S gdm firefox alacritty python python-pip gnome qtile git python-pywlroots xorg-xwayland python-pyxdg ttf-dejavu ttf-nerd-fonts-symbols-common
+
 ```
 
 
