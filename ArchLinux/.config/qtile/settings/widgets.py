@@ -100,7 +100,7 @@ def workspaces():
         # separator(),
     ]
 
-
+"""
 primary_widgets = [
     *workspaces(),
 
@@ -141,6 +141,45 @@ primary_widgets = [
     powerline('dark', 'color1'),
 
     widget.Systray(background=colors['dark'], padding=5),
+]
+"""
+
+
+
+primary_widgets = [
+    *workspaces(),
+
+    # separator(),
+
+    custom_powerline('color4', 'dark'),
+
+    icon(bg="color4", text=' '),  # Icon: nf-fa-download
+
+    widget.CheckUpdates(
+        background=colors['color4'],
+        colour_have_updates=colors['text'],
+        colour_no_updates=colors['text'],
+        no_update_string='0',
+        display_format='{updates}',
+        update_interval=1800,
+        custom_command='checkupdates',
+    ),
+
+    powerline('color3', 'color4'),
+
+    icon(bg="color3", text=' '),  # Icon: nf-fa-feed
+
+    # Dejamos Net listo. Si no marca red, recuerda quitarle el parámetro interface
+    widget.Net(**base(bg='color3'), interface='enp0s25'), 
+
+    powerline('color1', 'color3'),
+
+    widget.Clock(**base(bg='color1'), format='%d/%m/%Y - %H:%M '),
+
+    powerline('dark', 'color1'),
+
+    # === CAMBIO CRÍTICO PARA WAYLAND AQUÍ ===
+    widget.StatusNotifier(background=colors['dark'], padding=5),
 ]
 
 secondary_widgets = [

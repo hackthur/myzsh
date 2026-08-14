@@ -1,34 +1,50 @@
-
-
 from libqtile.config import Screen
 from libqtile import bar
-from libqtile.log_utils import logger
+from libqtile import qtile  # CORREGIDO: Se importa desde libqtile
 from .widgets import primary_widgets, secondary_widgets
-import subprocess
-
 
 def status_bar(widgets):
     return bar.Bar(widgets, 16, opacity=0.60)
 
+# Ruta de tu fondo de pantalla clásico
+mi_fondo = "~/.config/qtile/images/hackthur2.png"
 
-screens = [Screen(top=status_bar(primary_widgets))]
+# Creamos la lista de pantallas vacía
+screens = []
 
-xrandr = "xrandr | grep -w 'connected' | cut -d ' ' -f 2 | wc -l"
+# Detectar número de monitores de forma segura para Wayland y X11
+num_monitores = 1
 
-command = subprocess.run(
-    xrandr,
-    shell=True,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
+if qtile:
+    try:
+        if qtile.core and hasattr(qtile.core, "outputs"):
+            # Backend Wayland
+            num_monitores = len(qtile.core.outputs)
+        elif hasattr(qtile, "conn") and hasattr(qtile.conn, "pseudoscreens"):
+            # Backend X11 (Fallback seguro)
+            num_monitores = len(qtile.conn.pseudoscreens)
+    except Exception:
+        num_monitores = 1
+
+# Configuramos la pantalla principal (Monitor 1)
+screens.append(
+    Screen(
+        top=status_bar(primary_widgets),
+        wallpaper=mi_fondo,
+        wallpaper_mode="fill"
+    )
 )
 
-if command.returncode != 0:
-    error = command.stderr.decode("UTF-8")
-    logger.error(f"Failed counting monitors using {xrandr}:\n{error}")
-    connected_monitors = 1
-else:
-    connected_monitors = int(command.stdout.decode("UTF-8"))
+# Si tienes más monitores conectados, les añade su barra secundaria
+if num_monitores > 1:
+    for _ in range(1, num_monitores):
+        screens.append(
+            Screen(
+                top=status_bar(secondary_widgets),
+                wallpaper=mi_fondo,
+                wallpaper_mode="fill"
+            )
+        )
 
-if connected_monitors > 1:
-    for _ in range(1, connected_monitors):
-        screens.append(Screen(top=status_bar(secondary_widgets)))
+
+

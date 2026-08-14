@@ -8,12 +8,6 @@ import os
 import psutil  # installed by pip the psutil dependency
 import json
 
-# --- ESTO ACTIVA TU TECLADO EN ESPAÑOL LATINOAMERICANO EN WAYLAND ---
-from libqtile.backend.wayland import InputConfig
-wl_input_rules = {
-    "type:keyboard": InputConfig(kb_layout="latam"),
-}
-# --------------------------------------------------------------------
 
 from settings.keys import keys
 from settings.groups import groups
@@ -32,14 +26,34 @@ follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 
+
+
+# floating_layout = layout.Floating(float_rules=[
+#     # Run the utility of `xprop` to see the wm class and name of an X client.
+#     *layout.Floating.default_float_rules,
+#     Match(wm_class='confirmreset'),  # gitk
+#     Match(wm_class='makebranch'),  # gitk
+#     Match(wm_class='maketag'),  # gitk
+#     Match(wm_class='ssh-askpass'),  # ssh-askpass
+#     Match(title='branchdialog'),  # gitk
+#     Match(title='pinentry'),  # GPG key password entry
+# ])
+
+
+
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
-# Cambiamos "LG3D" por "qtile" ya que Wayland no necesita simular ser Java
-wmname = "qtile" 
+wmname = "LG3D"
 
-# --- ELIMINAMOS PICOM, SETXKBMAP Y FEH DE AQUÍ ---
-# El fondo de pantalla ahora lo maneja Qtile de forma nativa en tu archivo de pantallas.
 
+cmd = [
+    "setxkbmap latam",
+    "feh --bg-fill ~/.config/qtile/images/hackthur2.png",
+    "picom &"
+]
+
+for x in cmd:
+    os.system(x)
 
