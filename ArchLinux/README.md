@@ -469,20 +469,13 @@ primary_widgets = [
         update_interval=1800,
         custom_command='checkupdates',
     ),
-
     powerline('color3', 'color4'),
-
     icon(bg="color3", text=' '),  # Icon: nf-fa-feed
-
     # Dejamos Net listo. Si no marca red, recuerda quitarle el parámetro interface
     widget.Net(**base(bg='color3'), interface='enp0s25'), 
-
     powerline('color1', 'color3'),
-
     widget.Clock(**base(bg='color1'), format='%d/%m/%Y - %H:%M '),
-
     powerline('dark', 'color1'),
-
     # === CAMBIO CRÍTICO PARA WAYLAND AQUÍ ===
     widget.StatusNotifier(background=colors['dark'], padding=5),
 ]
@@ -490,19 +483,12 @@ primary_widgets = [
 
 secondary_widgets = [
     *workspaces(),
-
     separator(),
-
     powerline('color1', 'dark'),
-
     widget.CurrentLayout(**base(bg='color1'), scale=0.65),
-
     widget.CurrentLayout(**base(bg='color1'), padding=5),
-
     powerline('color2', 'color1'),
-
     widget.Clock(**base(bg='color2'), format='%d/%m/%Y - %H:%M '),
-
     powerline('dark', 'color2'),
 ]
 
@@ -514,5 +500,54 @@ widget_defaults = {
 extension_defaults = widget_defaults.copy()
 ```
 
+## 🛡️ AUR Security Guide (How to Read & Audit Recipes)
+
+Since the Arch User Repository (AUR) relies on community-driven installation recipes (`PKGBUILD` files), malicious actors can compromise orphan packages to inject malware. Follow these steps to audit your packages using `yay` before compiling them on your machine.
+
+### 1. Inspecting a Package BEFORE Installation
+When installing a new package {e.g., `burpsuite`), `yay` will ask you several interactive questions. Handle them like this:
 
 
+1. **`PKGBUILDs to edit?`** -> Press **`Enter`** (None) unless you need to change something manually.
+2. **`Diffs to show? [N]one [A]ll [Ab]ort`** -> Type **`A`** (All) and press **`Enter`**.
+
+This opens the full script inside a secure text viewer (`less`).
+* Use the **Arrow Keys** to scroll up and down.
+* Press **`Q`** to exit the viewer and continue with the installation.
+
+> 💡 **Quick Tip:** If you want to download and inspect a recipe *without* starting the installation process, run:
+> ```bash
+> yay --getpkgbuild <package_name>
+> ```
+
+---
+
+### 2. Auditing Packages That Are ALREADY Installed
+`yay` keeps a local history of every recipe you have ever built. You can inspect your current setup at any time by exploring your local cache folder:
+
+```bash
+# Navigate to your local yay cache
+cd ~/.cache/yay/
+
+# List all your installed AUR packages
+ls
+
+# Enter a specific package folder and view its instructions
+cd <package_name>
+cat PKGBUILD
+```
+
+---
+
+### 3. The Security Checklist: What to Look For
+When reading a `PKGBUILD` script, pay close attention to these three specific sections where malicious code is usually injected:
+
+* **`source=(...)`** (Where the files are downloaded from)
+  * ✅ **Safe:** Links pointing to official websites (e.g., `portswigger.net`) or the author's official GitHub repository.
+  * ❌ **Suspicious:** Domains using strange extensions (`.xyz`, `.top`), unknown servers, or random personal GitHub profiles.
+
+* **`prepare()`** (Pre-compilation steps)
+  * ❌ **Suspicious:** Look for active network commands like `curl`, `wget`, or `npm install` fetching external binaries and executing them immediately via `bash script.sh`. Clean recipes rarely download hidden files here.
+
+* **`build()` or `package()`** (Compilation and folder creation)
+  * ❌ **Suspicious:** Any line attempting to read your home directory (`$HOME` or `~/.ssh`), copy your personal files, or execute obfuscated background binaries.
